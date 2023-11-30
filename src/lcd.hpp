@@ -1,6 +1,8 @@
 #ifndef LCD_ST7735S_HPP
 #define LCD_ST7735S_HPP
 
+#include <inttypes.h>
+
 #define LCD_SCAN_HORIZONTAL 0x00
 #define LCD_SCAN_VERTICAL 0x01
 
@@ -40,15 +42,15 @@
 #define MEM_CTL_MH  (1<<2) // Horizontal Refresh Order (0 = Left to right, 1 = Right to left)
 #define MEM_CTL_DEFAULT 0
 
-extern void lcd_set_inversion(unsigned char inversion);
-extern void lcd_set_sleep(unsigned char sleep);
-extern void lcd_set_gamma(unsigned char gamma);
-extern void lcd_set_enabled(unsigned char enabled);
-extern void lcd_set_tearing(unsigned char tearing);
-extern void lcd_set_color_mode(unsigned char mode);
-extern void lcd_set_mem_access_ctl(unsigned char flags);
+extern void lcd_set_inversion(uint8_t inversion);
+extern void lcd_set_sleep(uint8_t sleep);
+extern void lcd_set_gamma(uint8_t gamma);
+extern void lcd_set_enabled(uint8_t enabled);
+extern void lcd_set_tearing(uint8_t tearing);
+extern void lcd_set_color_mode(uint8_t mode);
+extern void lcd_set_mem_access_ctl(uint8_t flags);
 
 extern void lcd_init();
-extern void lcd_display(const unsigned char* image);
+extern void lcd_display(const uint8_t* image);
 
 #endif
