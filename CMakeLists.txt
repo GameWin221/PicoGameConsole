@@ -13,8 +13,8 @@ file(GLOB GAME_CONSOLE_SRC CONFIGURE_DEPENDS "src/*.hpp" "src/*.cpp" "src/*/*.hp
 
 add_executable(${PROJECT_NAME} ${GAME_CONSOLE_SRC})
 
-pico_enable_stdio_usb(${PROJECT_NAME} 1)
-pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 0)
+pico_enable_stdio_uart(${PROJECT_NAME} 0)
 
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_LIST_DIR}/src")
 target_link_libraries(${PROJECT_NAME} pico_stdlib pico_time hardware_spi hardware_pwm hardware_adc pico_multicore)
