@@ -11,17 +11,15 @@
 /// Potential optimisations:
 // Second core for SPI canvas transfer
 // Update only a part of the screen (set Windows before draw)
+// Use uint16_fast_t
 
 /// TODO:
-// Audio queue, maybe separate thread?
-// Make audio an IRQ handle and make the speaker math use Hz values
-// Make audio use accurate Hz values
+// Play sequences of notes asynchronously (use alarms from pico/clocks.h)
 // Make my own font
 // Actual games
 // README
 
-int main()
-{
+int main() {
 	ConsoleInput input{};
 	ConsoleTiming timing{};
 	
@@ -32,8 +30,7 @@ int main()
 	
 	console_core_load_game(game_demo_info);
 
-	while(true)
-	{
+	while(true) {
 		console_input_poll(&input);
 		console_timing_update(&timing);
 		console_core_update_game(input, timing);

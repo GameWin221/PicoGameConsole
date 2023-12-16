@@ -1,7 +1,7 @@
 #ifndef LCD_ST7735S_HPP
 #define LCD_ST7735S_HPP
 
-#include <inttypes.h>
+#include <cinttypes>
 
 #define LCD_SCAN_HORIZONTAL 0x00
 #define LCD_SCAN_VERTICAL 0x01

@@ -6,8 +6,8 @@
 struct Font 
 {    
     const uint8_t* data;
-    const uint16_t width;
-    const uint16_t height;
+    const uint_fast16_t width;
+    const uint_fast16_t height;
 };
 
 extern const Font lcd_font_24px;
