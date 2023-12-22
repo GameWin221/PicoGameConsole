@@ -34,11 +34,15 @@ void console_input_init() {
 }
 
 void console_input_poll(ConsoleInput* console_input) {
+	// use 3723.64 instead of 4096 in order to make it work with 3.0V instead of 3.3V
+	// ADC reading 3.3V -> 4096.0
+	// ADC reading 3.0V -> 3723.64
+
     adc_select_input(JOYSTICK_XAXIS_PIN-26);
-	console_input->joystick_x = ((float)adc_read() / 4096.0f * 2.0f - 1.0f)/* + 0.08f*/;
+	console_input->joystick_x = ((float)adc_read() / 3723.64f * 2.0f - 1.0f);
 	
 	adc_select_input(JOYSTICK_YAXIS_PIN-26);
-	console_input->joystick_y = ((float)adc_read() / 4096.0f * 2.0f - 1.0f)/* + 0.08f*/;
+	console_input->joystick_y = ((float)adc_read() / 3723.64f * 2.0f - 1.0f);
 
 	bool joystick_button = gpio_get(JOYSTICK_BUTTON_PIN);
 	bool button_left = gpio_get(BUTTON_LEFT_PIN);

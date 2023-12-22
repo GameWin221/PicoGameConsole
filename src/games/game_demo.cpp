@@ -9,6 +9,26 @@
 #include <console_timing.hpp>
 #include <console_input.hpp>
 
+constexpr static ConsoleSound left_button_sounds[1] = {
+	{ 200, 100 }
+};
+constexpr static ConsoleSound right_button_sounds[1] = {
+	{ 600, 100 }
+};
+constexpr static ConsoleSound both_button_sounds[11] = {
+	{ 200, 200 },
+	{ 0, 200 },
+	{ 200, 200 },
+	{ 0, 100 },
+	{ 240, 400 },
+	{ 0, 100 },
+	{ 200, 400 },
+	{ 0, 100 },
+	{ 270, 400 },
+	{ 0, 100 },
+	{ 245, 600 }
+};
+
 static void game_demo_init() {
 	
 }
@@ -17,13 +37,11 @@ static void game_demo_exit() {
 }
 static void game_demo_update(const ConsoleInput& input, const ConsoleTiming& timing) {
     if(input.button_right && input.button_left && (input.button_left_changed || input.button_right_changed)) {
-		console_audio_buzzer(600, 100);
+		console_audio_play_sounds(both_button_sounds, 11);
 	} else if(input.button_right && input.button_right_changed) {
-		console_audio_buzzer(400, 100);
+		console_audio_play_sounds(right_button_sounds, 1);
 	} else if(input.button_left && input.button_left_changed) {
-		console_audio_buzzer(200, 100);
-	} else {
-		console_audio_buzzer(0, 0);
+		console_audio_play_sounds(left_button_sounds, 1);
 	}
 
 	int16_t joy_icon_x = (int16_t)(input.joystick_x * -40);

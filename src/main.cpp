@@ -14,9 +14,8 @@
 // Use uint16_fast_t
 
 /// TODO:
-// Play sequences of notes asynchronously (use alarms from pico/clocks.h)
 // Make my own font
-// Actual games
+// Fix the bottom line (visible in doom game)
 // README
 
 int main() {
@@ -28,7 +27,7 @@ int main() {
 	console_input_init();
 	console_audio_init();
 	
-	console_core_load_game(game_demo_info);
+	console_core_load_game(game_menu_info);
 
 	while(true) {
 		console_input_poll(&input);

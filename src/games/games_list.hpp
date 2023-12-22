@@ -8,5 +8,7 @@ struct GameInfo {
 };
 
 extern GameInfo game_demo_info;
+extern GameInfo game_doom_info;
+extern GameInfo game_menu_info;
 
 #endif
