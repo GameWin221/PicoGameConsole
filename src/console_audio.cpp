@@ -4,12 +4,10 @@
 #include <hardware/pwm.h>
 #include "hardware/clocks.h"
 
-#define BUZZER_PIN 19
+#define BUZZER_PIN 14
 
-// 20% duty cycle results in better audio quality for a buzzer
-// (in case of an usual speaker 50% is usually the best)
 #define PWM_WRAP 10000
-#define PWM_DUTY (PWM_WRAP / 5)
+#define PWM_DUTY (PWM_WRAP / 2)
 
 static uint32_t buzzer_slice{};
 static uint32_t buzzer_channel{};

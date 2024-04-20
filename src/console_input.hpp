@@ -4,10 +4,7 @@
 struct ConsoleInput {
     float joystick_x = 0.0f;
     float joystick_y = 0.0f;
-
-    bool joystick_button = false;
-    bool joystick_button_changed = false;
-
+    
     bool button_right = false;
     bool button_right_changed = false;
 

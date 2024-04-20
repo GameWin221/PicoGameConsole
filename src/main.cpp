@@ -17,6 +17,8 @@
 // Make my own font
 // Fix the bottom line (visible in doom game)
 // README
+// Improve console_audio module to use actual hz values
+// Improve console_lcd module to sync with horizontal and vertical lines signals (pseudo vsync)
 
 int main() {
 	ConsoleInput input{};
