@@ -1,15 +1,10 @@
 #include "console_input.hpp"
+#include "console_config.hpp"
 
 #include <pico/stdlib.h>
 #include <pico/stdio.h>
 #include <stdio.h>
 #include <hardware/adc.h>
-
-#define JOYSTICK_XAXIS_PIN 27
-#define JOYSTICK_YAXIS_PIN 26
-
-#define BUTTON_LEFT_PIN 16
-#define BUTTON_RIGHT_PIN 17
 
 void console_input_init() {
     stdio_init_all();  

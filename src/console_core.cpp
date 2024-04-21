@@ -1,5 +1,6 @@
 #include "console_core.hpp"
 #include "games/games_list.hpp"
+#include "console_config.hpp"
 
 static void (*console_core_init_fn)() = nullptr; 
 static void (*console_core_exit_fn)() = nullptr; 

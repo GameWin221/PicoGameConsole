@@ -5,7 +5,7 @@
 #include <lcd_fonts/lcd_fonts.hpp>
 #include <console_draw.hpp>
 #include <console_lcd.hpp>
-
+#include "console_config.hpp"
 #include <console_core.hpp>
 #include <console_audio.hpp>
 #include <console_timing.hpp>

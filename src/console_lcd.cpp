@@ -1,71 +1,45 @@
 #include "console_lcd.hpp"
+#include "console_config.hpp"
 
 #include "hardware/spi.h"
 #include "hardware/pwm.h"
 #include "pico/stdlib.h"
 
-#define DIN 19
-#define CLK 18
-#define CS  11
-#define DC  12 
-#define RST 13
-#define BL  15
-
-// Sending data at 65.536MHz
-// It's the max possible frequency
-#define SPI_FREQ 65536000
-#define SPI_CHANNEL spi0
-
-#define CMD_SLEEP_IN 0x11
-#define CMD_SLEEP_OUT 0x11
-#define CMD_INVERSION_ON 0x21
-#define CMD_INVERSION_OFF 0x20
-#define CMD_GAMMA_SET 0x26
-#define CMD_DISPLAY_ON 0x29
-#define CMD_DISPLAY_OFF 0x28
-#define CMD_COLUMN_ADDR_SET 0x2a
-#define CMD_ROW_ADDR_SET 0x2b
-#define CMD_MEMORY_WRITE 0x2c
-#define CMD_TEARING_ON 0x35
-#define CMD_TEARING_OFF 0x34
-#define CMD_MEM_ACCESS_CTL 0x36
-#define CMD_COLOR_MODE 0x3a
-
 static uint8_t console_lcd_current_color_mode = 0;
 
 static inline void send_command(uint8_t cmd) {
-    gpio_put(DC, 0);
-    gpio_put(CS, 0);
+    gpio_put(LCD_DC, 0);
+    gpio_put(LCD_CS, 0);
     spi_write_blocking(SPI_CHANNEL, &cmd, 1);
-    gpio_put(CS, 1);
+    gpio_put(LCD_CS, 1);
 }
 
 static inline void send_byte(uint8_t data) {
-    gpio_put(DC, 1);
-    gpio_put(CS, 0);
+    gpio_put(LCD_DC, 1);
+    gpio_put(LCD_CS, 0);
     spi_write_blocking(SPI_CHANNEL, &data, 1);
-    gpio_put(CS, 1);
+    gpio_put(LCD_CS, 1);
 }
 
 static inline void reset() {
-    gpio_put(RST, 1);
+    gpio_put(LCD_RST, 1);
     sleep_ms(2);
-    gpio_put(RST, 0);
+    gpio_put(LCD_RST, 0);
     sleep_ms(2);
-    gpio_put(RST, 1);
+    gpio_put(LCD_RST, 1);
     sleep_ms(2);
 }
 
 static void set_windows(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_t yEnd) {
     // Set X coordinate
-    send_command(CMD_COLUMN_ADDR_SET);
+    send_command(LCD_CMD_COLUMN_ADDR_SET);
     send_byte(0x00);
     send_byte(xStart);
     send_byte(0x00);
     send_byte(xEnd);
 
     // Set Y coordinate
-    send_command(CMD_ROW_ADDR_SET);
+    send_command(LCD_CMD_ROW_ADDR_SET);
     send_byte(0x00);
     send_byte(yStart);
     send_byte(0x00);
@@ -73,38 +47,38 @@ static void set_windows(uint16_t xStart, uint16_t yStart, uint16_t xEnd, uint16_
 }
 
 void console_lcd_set_inversion(uint8_t inversion) {
-    send_command(inversion ? CMD_INVERSION_ON : CMD_INVERSION_OFF);
+    send_command(inversion ? LCD_CMD_INVERSION_ON : LCD_CMD_INVERSION_OFF);
 }
 void console_lcd_set_sleep(uint8_t sleep)  {
-    send_command(sleep ? CMD_SLEEP_IN : CMD_SLEEP_OUT);
+    send_command(sleep ? LCD_CMD_SLEEP_IN : LCD_CMD_SLEEP_OUT);
 }
 
 void console_lcd_set_gamma(uint8_t gamma)  {
-    send_command(CMD_GAMMA_SET);
+    send_command(LCD_CMD_GAMMA_SET);
     send_byte(gamma);
 }
 
 void console_lcd_set_enabled(uint8_t enabled) {
-    send_command(enabled ? CMD_DISPLAY_ON : CMD_DISPLAY_OFF);
+    send_command(enabled ? LCD_CMD_DISPLAY_ON : LCD_CMD_DISPLAY_OFF);
 }
 
 void console_lcd_set_tearing(uint8_t tearing) {
     if(tearing != LCD_TEARING_OFF) {
-        send_command(CMD_TEARING_ON);
+        send_command(LCD_CMD_TEARING_ON);
         send_byte(tearing);
     } else {
-        send_command(CMD_TEARING_OFF);
+        send_command(LCD_CMD_TEARING_OFF);
     }
 }
 
 void console_lcd_set_color_mode(uint8_t mode) {
     console_lcd_current_color_mode = mode;
-    send_command(CMD_COLOR_MODE);
+    send_command(LCD_CMD_COLOR_MODE);
     send_byte(mode);
 }
 
 void console_lcd_set_mem_access_ctl(uint8_t flags) {
-    send_command(CMD_MEM_ACCESS_CTL);
+    send_command(LCD_CMD_MEM_ACCESS_CTL);
     send_byte(flags);
 }
 
@@ -115,10 +89,10 @@ void console_lcd_display(const uint8_t* image) {
     set_windows(2, 1, LCD_WIDTH+1, LCD_HEIGHT);
     #endif
 
-    send_command(CMD_MEMORY_WRITE);
+    send_command(LCD_CMD_MEMORY_WRITE);
 
-    gpio_put(DC, 1);
-    gpio_put(CS, 0);
+    gpio_put(LCD_DC, 1);
+    gpio_put(LCD_CS, 0);
 
     if(console_lcd_current_color_mode == LCD_COLOR_MODE_4R4G4B) {
         spi_write_blocking(SPI_CHANNEL, image, LCD_WIDTH*LCD_HEIGHT*12/8);
@@ -130,28 +104,28 @@ void console_lcd_display(const uint8_t* image) {
         for(;;);
     }
 
-    gpio_put(CS, 1);
+    gpio_put(LCD_CS, 1);
 }
 
 void console_lcd_init() {
     spi_init(SPI_CHANNEL, SPI_FREQ);
-    gpio_set_function(CLK, GPIO_FUNC_SPI);
-    gpio_set_function(DIN, GPIO_FUNC_SPI);
+    gpio_set_function(LCD_CLK, GPIO_FUNC_SPI);
+    gpio_set_function(LCD_DIN, GPIO_FUNC_SPI);
 
-    gpio_init(RST);
-    gpio_init(DC);
-    gpio_init(CS);
-    gpio_init(BL);
+    gpio_init(LCD_RST);
+    gpio_init(LCD_DC);
+    gpio_init(LCD_CS);
+    gpio_init(LCD_BL);
 
-    gpio_set_dir(RST, GPIO_OUT);
-    gpio_set_dir(DC, GPIO_OUT);
-    gpio_set_dir(CS, GPIO_OUT);
-    gpio_set_dir(BL, GPIO_OUT);
+    gpio_set_dir(LCD_RST, GPIO_OUT);
+    gpio_set_dir(LCD_DC, GPIO_OUT);
+    gpio_set_dir(LCD_CS, GPIO_OUT);
+    gpio_set_dir(LCD_BL, GPIO_OUT);
 
-    gpio_put(CS, 1);
-    gpio_put(DC, 0);
-    gpio_put(BL, 1);
-    gpio_put(RST, 0);
+    gpio_put(LCD_CS, 1);
+    gpio_put(LCD_DC, 0);
+    gpio_put(LCD_BL, 1);
+    gpio_put(LCD_RST, 0);
 
     reset();
     console_lcd_set_mem_access_ctl((LCD_SCAN_DIRECTION == LCD_SCAN_HORIZONTAL ? LCD_MEM_CTL_MV : LCD_MEM_CTL_DEFAULT) | LCD_MEM_CTL_MY);

@@ -1,6 +1,6 @@
 #include "console_draw.hpp"
 #include "lcd_fonts/lcd_fonts.hpp"
-#include "console_lcd.hpp"
+#include "console_config.hpp"
 
 static uint16_t canvas[LCD_WIDTH * LCD_HEIGHT] = { 0 };
 

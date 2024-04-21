@@ -1,13 +1,9 @@
 #include "console_audio.hpp"
+#include "console_config.hpp"
 
 #include <pico/stdlib.h>
 #include <hardware/pwm.h>
 #include "hardware/clocks.h"
-
-#define BUZZER_PIN 14
-
-#define PWM_WRAP 10000
-#define PWM_DUTY (PWM_WRAP / 2)
 
 static uint32_t buzzer_slice{};
 static uint32_t buzzer_channel{};

@@ -1,4 +1,5 @@
 #include "console_timing.hpp"
+#include "console_config.hpp"
 
 #include <pico/time.h>
 
